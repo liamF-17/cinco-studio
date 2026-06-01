@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CINCO STUDIO — Fotografía y Producción de Video</title>
+  <link rel="preload" as="video" href="assets/REDPOINT_HORIZONTAL.mp4">
+  <meta name="description" content="Cinco Studio es un estudio de fotografía y producción de video. Trabajo cinematográfico para marcas que entienden la diferencia.">
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png">
+  <link rel="apple-touch-icon" href="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:  #000000;
+      --cream:  #FCF5E8;
+      --warm:   #BEB28E;
+      --red:    #af2825;
+      --dim:    rgba(190,178,142,0.10);
+      --font:   'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ─── SKIP LINK ──────────────────────────────────── */
+    .skip-link {
+      position: fixed; top: -100%; left: 1rem;
+      background: var(--cream); color: var(--black);
+      padding: .6rem 1.2rem; font-size: .75rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase; text-decoration: none;
+      z-index: 9999; transition: top .2s;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    /* ─── FOCUS STATES ──────────────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--red);
+      outline-offset: 3px;
+    }
+    body:not(.keyboard-nav) :focus { outline: none; }
+
+    /* ─── CURSOR ─────────────────────────────────────────── */
+    #cur {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--red);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform .15s;
+    }
+    #cur-ring {
+      position: fixed;
+      width: 38px; height: 38px;
+      border: 1px solid rgba(190,178,142,.4);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: left .12s ease, top .12s ease, transform .3s ease, border-color .3s;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background .4s, backdrop-filter .4s, border-bottom .4s;
+    }
+    nav.scrolled {
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--dim);
+    }
+    .nav-logo {
+      font-size: .9rem; font-weight: 900;
+      letter-spacing: .35em; text-transform: uppercase;
+      color: var(--cream); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--warm); text-decoration: none;
+      transition: color .25s; padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: color .25s, border-color .25s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a.active { color: var(--cream); border-bottom-color: var(--red); }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    .hero {
+      position: relative; height: 200vh; width: 100%;
+    }
+    .hero-sticky {
+      position: sticky; top: 0;
+      height: 100svh; width: 100%;
+      display: flex; align-items: flex-end;
+      padding: 3rem; overflow: hidden;
+    }
+
+    /* Scaling wrapper — JS controls transform */
+    .hero-video-scaler {
+      position: absolute; inset: 0;
+      transform-origin: center center;
+      will-change: transform;
+      border-radius: 28px;
+      overflow: hidden;
+      transform: scale(0.45);
+    }
+
+    /* Hero background video */
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* Dark cinematic overlay over video */
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,.52);
+      z-index: 1;
+    }
+
+    /* Film-grain overlay via SVG filter */
+    .hero-grain {
+      position: absolute; inset: 0; pointer-events: none; z-index: 2;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      opacity: .6;
+    }
+
+    /* Vignette */
+    .hero-vignette {
+      position: absolute; inset: 0; pointer-events: none; z-index: 3;
+      background: radial-gradient(ellipse 120% 100% at 50% 50%, transparent 35%, rgba(0,0,0,.85) 100%);
+    }
+
+    .hero-content { position: relative; z-index: 5; width: 100%; }
+
+    .hero-eyebrow {
+      font-size: .65rem; font-weight: 600;
+      letter-spacing: .35em; text-transform: uppercase;
+      color: var(--warm); margin-bottom: 1.8rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 40px; height: 1px; background: var(--red);
+    }
+
+    .hero-title {
+      font-size: clamp(4.5rem, 13vw, 16rem);
+      font-weight: 900;
+      line-height: .84;
+      letter-spacing: -.04em;
+      color: var(--cream);
+    }
+    .hero-title .word { display: block; overflow: hidden; }
+    .hero-title .word-inner {
+      display: block;
+      animation: slideUp .9s cubic-bezier(.16,1,.3,1) both;
+    }
+    .hero-title .word:nth-child(1) .word-inner { animation-delay: .1s; }
+    .hero-title .word:nth-child(2) .word-inner { animation-delay: .22s; }
+    .hero-title .word:nth-child(3) .word-inner { animation-delay: .34s; }
+    .hero-title .word:nth-child(4) .word-inner { animation-delay: .46s; }
+    @keyframes slideUp {
+      from { transform: translateY(110%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .hero-title .red { color: var(--red); }
+
+    .hero-footer {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-top: 3rem;
+      animation: fadeIn 1.2s .7s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-tagline {
+      font-size: 1rem; font-weight: 300;
+      line-height: 1.6; color: var(--warm);
+      max-width: 28ch;
+    }
+    .hero-cta {
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--cream); text-decoration: none;
+      border-bottom: 1px solid var(--red); padding-bottom: 4px;
+      transition: color .25s;
+    }
+    .hero-cta:hover { color: var(--red); }
+
+    /* Scroll line */
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 3rem;
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: .6rem; z-index: 5;
+      animation: fadeIn 1s 1.2s ease both;
+    }
+    .scroll-hint-label {
+      font-size: .55rem; font-weight: 600;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: rgba(190,178,142,.35);
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px; height: 56px;
+      background: linear-gradient(to bottom, var(--red), transparent);
+      animation: grow 2.5s ease-in-out infinite;
+      transform-origin: top;
+    }
+    @keyframes grow {
+      0%   { transform: scaleY(0); opacity: 0; }
+      40%  { opacity: 1; }
+      100% { transform: scaleY(1); opacity: 0; }
+    }
+
+    /* ─── WORK GRID ──────────────────────────────────────── */
+    #work { background: #000; }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2px;
+      background: #111;
+    }
+
+    .wi { /* work item */
+      position: relative; overflow: hidden;
+      background: #060606;
+    }
+    .wi:nth-child(1) { grid-column: 1/8;  aspect-ratio: 16/9; }
+    .wi:nth-child(2) { grid-column: 8/13; aspect-ratio: 1/1; }
+    .wi:nth-child(3) { grid-column: 1/5;  aspect-ratio: 4/5; }
+    .wi:nth-child(4) { grid-column: 5/9;  aspect-ratio: 4/5; }
+    .wi:nth-child(5) { grid-column: 9/13; aspect-ratio: 4/5; }
+    .wi:nth-child(6) { grid-column: 1/6;  aspect-ratio: 16/9; }
+    .wi:nth-child(7) { grid-column: 6/13; aspect-ratio: 16/9; }
+
+    /* Distinct cinematic gradient per cell */
+    .wi:nth-child(1) .wi-bg { background: linear-gradient(135deg, #0e0c06 0%, #1c1408 40%, #241a0c 70%, #0a0808 100%); }
+    .wi:nth-child(2) .wi-bg { background: linear-gradient(200deg, #08080f 0%, #0c0e1c 50%, #060610 100%); }
+    .wi:nth-child(3) .wi-bg { background: linear-gradient(170deg, #0a0c0a 0%, #0e1410 70%, #060806 100%); }
+    .wi:nth-child(4) .wi-bg { background: linear-gradient(145deg, #0e0808 0%, #180c0a 60%, #0a0606 100%); }
+    .wi:nth-child(5) .wi-bg { background: linear-gradient(190deg, #0a0c10 0%, #0c1018 60%, #080a0e 100%); }
+    .wi:nth-child(6) .wi-bg { background: linear-gradient(120deg, #100e08 0%, #181408 50%, #0c0a06 100%); }
+    .wi:nth-child(7) .wi-bg { background: linear-gradient(230deg, #080a0e 0%, #0a0c14 50%, #060810 100%); }
+
+    .wi-bg {
+      position: absolute; inset: 0;
+      transition: transform .8s cubic-bezier(.25,.46,.45,.94);
+    }
+    .wi:hover .wi-bg { transform: scale(1.05); }
+
+    /* Accent light per cell */
+    .wi::before {
+      content: ''; position: absolute; inset: 0;
+      pointer-events: none; z-index: 1;
+      transition: opacity .5s;
+    }
+    .wi:nth-child(1)::before { background: radial-gradient(ellipse 60% 50% at 60% 35%, rgba(190,178,142,.07) 0%, transparent 70%); }
+    .wi:nth-child(2)::before { background: radial-gradient(ellipse 70% 60% at 30% 60%, rgba(100,110,200,.06) 0%, transparent 70%); }
+    .wi:nth-child(3)::before { background: radial-gradient(ellipse 80% 70% at 50% 20%, rgba(100,160,100,.05) 0%, transparent 70%); }
+    .wi:nth-child(4)::before { background: radial-gradient(ellipse 80% 70% at 40% 70%, rgba(200,80,60,.05) 0%, transparent 70%); }
+    .wi:nth-child(5)::before { background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(80,110,180,.06) 0%, transparent 70%); }
+    .wi:nth-child(6)::before { background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(190,160,100,.07) 0%, transparent 70%); }
+    .wi:nth-child(7)::before { background: radial-gradient(ellipse 60% 50% at 70% 40%, rgba(120,140,200,.05) 0%, transparent 70%); }
+
+    /* Composition lines (like a director's frame) */
+    .wi-frame {
+      position: absolute; inset: 15%; z-index: 1;
+      border: 1px solid rgba(190,178,142,.05);
+      transition: opacity .4s;
+    }
+    .wi:hover .wi-frame { opacity: 0; }
+
+    .wi-overlay {
+      position: absolute; inset: 0; z-index: 2;
+      background: linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.1) 45%, transparent 70%);
+      opacity: 0; transition: opacity .45s;
+    }
+    .wi:hover .wi-overlay { opacity: 1; }
+
+    .wi-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 2rem; z-index: 3;
+      transform: translateY(12px); opacity: 0;
+      transition: transform .45s cubic-bezier(.25,.46,.45,.94), opacity .45s;
+    }
+    .wi:hover .wi-info { transform: translateY(0); opacity: 1; }
+
+    .wi-cat {
+      font-size: .58rem; font-weight: 700;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--red); margin-bottom: .5rem;
+    }
+    .wi-title {
+      font-size: 1.35rem; font-weight: 800;
+      letter-spacing: -.025em; color: var(--cream);
+      line-height: 1.1;
+    }
+    .wi-client {
+      font-size: .72rem; color: var(--warm);
+      margin-top: .3rem; letter-spacing: .05em;
+    }
+
+    .wi-num {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      font-size: .58rem; font-weight: 600;
+      letter-spacing: .15em;
+      color: rgba(190,178,142,.25); z-index: 3;
+    }
+
+    /* ─── MARQUEE ─────────────────────────────────────────── */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--dim);
+      border-bottom: 1px solid var(--dim);
+      padding: 1.4rem 0;
+      background: #000;
+    }
+    .marquee-track {
+      display: flex; gap: 0; white-space: nowrap;
+      animation: marquee 28s linear infinite;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    .mi {
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .28em; text-transform: uppercase;
+      color: var(--warm); padding: 0 2.5rem;
+      border-right: 1px solid var(--dim);
+      flex-shrink: 0;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── SHARED SECTION ─────────────────────────────────── */
+    .section { padding: 8rem 3rem; }
+    .section-divider { border-top: 1px solid var(--dim); }
+
+    /* Offset for fixed nav so sections don't hide under it */
+    section[id], div[id] { scroll-margin-top: 5rem; }
+
+    .section-label {
+      font-size: .6rem; font-weight: 700;
+      letter-spacing: .38em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 4rem;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .section-label::after {
+      content: ''; flex: 1; max-width: 60px;
+      height: 1px; background: var(--dim);
+    }
+
+    /* ─── ABOUT ───────────────────────────────────────────── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8rem; align-items: start;
+    }
+    .about-headline {
+      font-size: clamp(2.8rem, 5.5vw, 6rem);
+      font-weight: 900; line-height: .88;
+      letter-spacing: -.045em; color: var(--cream);
+    }
+    .about-text {
+      font-size: 1.05rem; font-weight: 300;
+      line-height: 1.75; color: var(--warm);
+      margin-bottom: 2rem;
+    }
+    .about-text:last-of-type { margin-bottom: 0; }
+
+    .stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--dim);
+      margin-top: 4rem;
+    }
+    .stat {
+      padding: 2.5rem 0 2.5rem;
+      border-bottom: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+    }
+    .stat:nth-child(2n) { border-right: none; padding-left: 2rem; }
+    .stat:nth-child(2n+1) { padding-right: 2rem; }
+    .stat:nth-last-child(-n+2) { border-bottom: none; }
+    .stat-num {
+      font-size: 3.5rem; font-weight: 900;
+      letter-spacing: -.05em; color: var(--cream); line-height: 1;
+    }
+    .stat-num sup { color: var(--red); font-size: 1.8rem; vertical-align: super; }
+    .stat-lbl {
+      font-size: .6rem; font-weight: 600;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--warm); margin-top: .6rem;
+    }
+
+    /* ─── SERVICES ─────────────────────────────────────────── */
+    .services-intro {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 5rem; gap: 4rem;
+    }
+    .services-headline {
+      font-size: clamp(2.4rem, 4.5vw, 5rem);
+      font-weight: 900; letter-spacing: -.045em;
+      color: var(--cream); line-height: .9;
+      max-width: 15ch;
+    }
+    .services-sub {
+      font-size: .95rem; font-weight: 300;
+      line-height: 1.7; color: var(--warm);
+      max-width: 32ch; padding-top: .5rem;
+    }
+
+    .svc-list { display: grid; grid-template-columns: repeat(3,1fr); }
+    .svc {
+      padding: 2.8rem;
+      border-top: 1px solid var(--dim);
+      border-right: 1px solid var(--dim);
+      transition: background .3s;
+    }
+    .svc:nth-child(3n) { border-right: none; }
+    .svc:hover { background: rgba(190,178,142,.03); }
+    .svc-n {
+      font-size: .58rem; font-weight: 700;
+      letter-spacing: .3em; color: var(--red);
+      margin-bottom: 1.8rem;
+    }
+    .svc-name {
+      font-size: 1.25rem; font-weight: 800;
+      letter-spacing: -.025em; color: var(--cream);
+      margin-bottom: .8rem;
+    }
+    .svc-desc {
+      font-size: .82rem; font-weight: 300;
+      line-height: 1.75; color: var(--warm);
+    }
+
+    /* ─── CLIENTS ──────────────────────────────────────────── */
+    .clients-intro {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 4rem; gap: 4rem;
+    }
+    .clients-sub {
+      font-size: .9rem; font-weight: 300;
+      color: var(--warm); max-width: 36ch; line-height: 1.65;
+    }
+
+    .client-grid {
+      display: grid; grid-template-columns: repeat(6,1fr);
+      border-top: 1px solid var(--dim);
+      border-left: 1px solid var(--dim);
+    }
+    .cl {
+      border-right: 1px solid var(--dim);
+      border-bottom: 1px solid var(--dim);
+      padding: 2.8rem 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .3s;
+    }
+    .cl:hover { background: rgba(190,178,142,.04); }
+    .cl span {
+      font-size: .75rem; font-weight: 800;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(190,178,142,.3); text-align: center; line-height: 1.5;
+      transition: color .3s;
+    }
+    .cl:hover span { color: var(--cream); }
+
+    /* ─── TESTIMONIALS ─────────────────────────────────────── */
+    .testimonials-intro {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 4rem; gap: 4rem;
+    }
+    .testimonial-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--dim);
+    }
+    .tc {
+      background: #000; overflow: hidden;
+      transition: background .3s;
+    }
+    .tc:hover { background: #080808; }
+    .tc-img-wrap { position: relative; overflow: hidden; }
+    .tc-img {
+      width: 100%; height: 280px;
+      object-fit: cover; object-position: top; display: block;
+      transition: transform .7s cubic-bezier(.25,.46,.45,.94);
+    }
+    .tc:hover .tc-img { transform: scale(1.04); }
+    .tc-img-fade {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 65%; pointer-events: none;
+      background: linear-gradient(to top, #000, transparent);
+    }
+    .tc-body { padding: 2rem 2rem 2.2rem; }
+    .tc-quote {
+      font-size: .88rem; font-weight: 300;
+      line-height: 1.75; color: var(--cream);
+      border-bottom: 1px solid var(--dim);
+      padding-bottom: 1.4rem; margin-bottom: 1.2rem;
+    }
+    .tc-quote::before {
+      content: '"'; display: block;
+      font-size: 2.4rem; font-weight: 900; line-height: .8;
+      color: var(--red); margin-bottom: .6rem;
+    }
+    .tc-name {
+      font-size: .78rem; font-weight: 600;
+      color: var(--warm); letter-spacing: .06em;
+    }
+    .tc-role {
+      font-size: .58rem; font-weight: 700;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--red); margin-top: .35rem;
+    }
+
+    /* ─── CONTACT ──────────────────────────────────────────── */
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8rem; align-items: center;
+    }
+    .contact-headline {
+      font-size: clamp(3.5rem, 8vw, 10rem);
+      font-weight: 900; line-height: .82;
+      letter-spacing: -.05em; color: var(--cream);
+    }
+    .contact-headline .red { color: var(--red); }
+
+    .contact-text {
+      font-size: 1rem; font-weight: 300;
+      line-height: 1.75; color: var(--warm);
+      margin-bottom: 3rem;
+    }
+    .contact-btn {
+      display: inline-block;
+      font-size: .7rem; font-weight: 800;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--black); background: var(--cream);
+      padding: 1.1rem 2.4rem; text-decoration: none;
+      border: 1px solid var(--cream);
+      transition: background .3s, color .3s;
+    }
+    .contact-btn:hover { background: var(--red); color: var(--cream); border-color: var(--red); }
+
+    .contact-details {
+      display: flex; gap: 3.5rem; margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+    .cd-label {
+      font-size: .55rem; font-weight: 700;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--red); margin-bottom: .4rem;
+    }
+    .cd-val {
+      font-size: .82rem; color: var(--warm);
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--dim);
+      padding: 2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .f-logo {
+      font-size: .85rem; font-weight: 900;
+      letter-spacing: .35em; text-transform: uppercase;
+      color: var(--cream);
+    }
+    .f-copy { font-size: .65rem; color: rgba(190,178,142,.3); letter-spacing: .08em; }
+    .f-links { display: flex; gap: 2rem; }
+    .f-links a {
+      font-size: .65rem; font-weight: 600;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--warm); text-decoration: none; transition: color .25s;
+    }
+    .f-links a:hover { color: var(--cream); }
+
+    /* ─── SOUND BUTTON ─────────────────────────────────────── */
+    .hero-sound-btn {
+      position: absolute;
+      top: 7rem; right: 3rem;
+      z-index: 5;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(190,178,142,.3);
+      color: var(--cream);
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: none;
+      transition: background .25s, border-color .25s;
+      flex-shrink: 0;
+    }
+    .hero-sound-btn:hover {
+      background: rgba(0,0,0,.75);
+      border-color: var(--cream);
+    }
+
+    /* ─── HERO LOGO ANIMATION ───────────────────────────────── */
+    .hero-logo-anim {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      width: clamp(416px, 75vw, 1066px);
+      pointer-events: none;
+    }
+    .hero-logo-anim video { width: 100%; height: auto; display: block; }
+
+    /* ─── WORK ITEM VIDEO ────────────────────────────────────── */
+    .wi-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity .7s ease;
+    }
+    .wi:hover .wi-video { opacity: 1; }
+    .wi-bg { transition: opacity .7s ease, transform .8s cubic-bezier(.25,.46,.45,.94); }
+    .wi:hover .wi-bg { opacity: 0; transform: scale(1.05); }
+
+    /* ─── SCROLL REVEAL ─────────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(36px);
+      transition: opacity .85s ease, transform .85s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── EXPANDING GALLERY ────────────────────────────────────── */
+    .gallery-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5rem 3rem;
+      background: #000;
+    }
+    .gallery-header {
+      max-width: 48rem;
+      text-align: center;
+      padding: 0 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .gallery-heading {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 600;
+      color: var(--cream);
+      letter-spacing: -.025em;
+    }
+    .gallery-subtext {
+      color: var(--warm);
+      margin-top: .6rem;
+      font-size: .9rem;
+      font-weight: 300;
+      line-height: 1.65;
+    }
+    .gallery-items {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 618px;
+      width: 100%;
+      max-width: 104rem;
+      padding: 0 1rem;
+    }
+    .gallery-item {
+      flex: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 618px;
+      transition: flex .5s cubic-bezier(.25,.46,.45,.94);
+      cursor: pointer;
+      position: relative;
+    }
+    .gallery-item:hover { flex: 5; }
+    .gallery-item img,
+    .gallery-video {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .gallery-section { padding: 3rem 1.5rem; }
+      .gallery-items {
+        flex-direction: column;
+        height: auto;
+        gap: 6px;
+      }
+      .gallery-item { flex: none; height: 278px; width: 100%; border-radius: 6px; }
+      .gallery-item:hover { flex: none; height: 401px; }
+    }
+
+    /* ─── REDUCED MOTION ────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      html { scroll-behavior: auto; }
+      .marquee-track { animation: none; }
+      .scroll-line { animation: none; opacity: .5; transform: scaleY(1); }
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .about-grid { grid-template-columns: 1fr; gap: 4rem; }
+      .svc-list { grid-template-columns: 1fr 1fr; }
+      .svc:nth-child(3n) { border-right: 1px solid var(--dim); }
+      .svc:nth-child(2n) { border-right: none; }
+      .client-grid { grid-template-columns: repeat(3,1fr); }
+      .testimonial-grid { grid-template-columns: 1fr 1fr; }
+      .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.5rem 1.5rem; }
+      .nav-links { gap: 1.5rem; flex-wrap: wrap; }
+      /* Minimum 44px touch target on nav links */
+      .nav-links a { min-height: 44px; display: flex; align-items: center; }
+      .section { padding: 5rem 1.5rem; }
+      .hero-sticky { padding: 1.5rem; }
+      .scroll-hint { display: none; }
+      .wi { grid-column: 1/13 !important; aspect-ratio: 16/9 !important; }
+      .svc-list { grid-template-columns: 1fr; }
+      .svc, .svc:nth-child(3n), .svc:nth-child(2n) { border-right: none; }
+      /* Minimum 16px body text on mobile */
+      .svc-desc { font-size: 1rem; }
+      .tc-quote { font-size: 1rem; }
+      .client-grid { grid-template-columns: repeat(2,1fr); }
+      .services-intro { flex-direction: column; }
+      .clients-intro { flex-direction: column; }
+      .testimonials-intro { flex-direction: column; }
+      .testimonial-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+      .f-links { justify-content: center; }
+      /* 44px touch target on contact button */
+      .contact-btn { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SKIP TO MAIN CONTENT (keyboard accessibility) -->
+<a href="#main-content" class="skip-link">Ir al contenido</a>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="nav" role="navigation" aria-label="Navegación principal">
+  <a href="#" class="nav-logo"><img src="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio" style="height:52px;width:auto;display:block;filter:brightness(0) invert(1);"></a>
+  <ul class="nav-links" role="list">
+    <li><a href="#work" data-section="work">Trabajo</a></li>
+    <li><a href="#studio" data-section="studio">Estudio</a></li>
+    <li><a href="#services" data-section="services">Servicios</a></li>
+    <li><a href="#contact" data-section="contact">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<main id="main-content">
+<section class="hero" id="hero">
+<div class="hero-sticky">
+  <div class="hero-video-scaler" id="heroVideoScaler">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/REDPOINT_HORIZONTAL_xft6zw.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-grain"></div>
+  <div class="hero-vignette"></div>
+
+  <div class="hero-logo-anim">
+    <video autoplay muted loop playsinline>
+      <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/LOGO_ANIMATION_msqgkv.webm" type="video/webm">
+    </video>
+  </div>
+
+  <button class="hero-sound-btn" id="soundBtn" aria-label="Activar sonido">
+    <svg id="soundIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <line x1="23" y1="9" x2="17" y2="15"></line>
+      <line x1="17" y1="9" x2="23" y2="15"></line>
+    </svg>
+  </button>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span class="scroll-hint-label">Desplazar</span>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Fotografía y Producción de Video</p>
+    <h1 class="hero-title">
+      <span class="word"><span class="word-inner">Lo</span></span>
+      <span class="word"><span class="word-inner">hacemos</span></span>
+      <span class="word"><span class="word-inner red">mover.</span></span>
+    </h1>
+    <div class="hero-footer">
+      <p class="hero-tagline">Producción cinematográfica para marcas que entienden la diferencia.</p>
+      <a href="#work" class="hero-cta" aria-label="Ver el trabajo - desplazar hacia abajo">Ver el trabajo ↓</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── WORK GALLERY ─────────────────────────────────────────────── -->
+<div id="work" class="gallery-section">
+  <div class="gallery-header">
+    <h2 class="gallery-heading">Nuestras Últimas Creaciones</h2>
+    <p class="gallery-subtext">Una colección visual de nuestros trabajos más recientes — cada pieza creada con intención, emoción y estilo.</p>
+  </div>
+  <div class="gallery-items">
+
+    <div class="gallery-item">
+      <video class="gallery-video" muted loop playsinline preload="metadata">
+        <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/VERO_TIM_CORTO_jsyf0v.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item">
+      <video class="gallery-video" muted loop playsinline preload="metadata">
+        <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/hypermotors_v3_kvdp6w.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item">
+      <video class="gallery-video" muted loop playsinline preload="metadata">
+        <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/lucia_reel_V2_xajvqb.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item">
+      <video class="gallery-video" muted loop playsinline preload="metadata">
+        <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/CZR_LANDSCAPE_pt7hox.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item">
+      <video class="gallery-video" muted loop playsinline preload="metadata">
+        <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/secretdisco_landscape_oa2pnu.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item">
+      <video class="gallery-video" muted loop playsinline preload="metadata">
+        <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/QUINEMA2_V2_dorcfs.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="gallery-item">
+      <video class="gallery-video" muted loop playsinline preload="metadata">
+        <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/QUINEMA_V1_k0biyv.mp4" type="video/mp4">
+      </video>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── MARQUEE ───────────────────────────────────────────────── -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="mi">Fotografía</span>
+    <span class="mi">Película de Marca</span>
+    <span class="mi">Producción Comercial</span>
+    <span class="mi">Documental</span>
+    <span class="mi">Corrección de Color</span>
+    <span class="mi">Postproducción</span>
+    <span class="mi">Dirección Creativa</span>
+    <span class="mi">Fotografía</span>
+    <span class="mi">Película de Marca</span>
+    <span class="mi">Producción Comercial</span>
+    <span class="mi">Documental</span>
+    <span class="mi">Corrección de Color</span>
+    <span class="mi">Postproducción</span>
+    <span class="mi">Dirección Creativa</span>
+  </div>
+</div>
+
+<!-- ── ABOUT ─────────────────────────────────────────────────── -->
+<section class="section section-divider" id="studio">
+  <p class="section-label">01 — El Estudio</p>
+  <div class="about-grid">
+    <div>
+      <h2 class="about-headline reveal">El oficio<br>por encima<br>de todo.</h2>
+    </div>
+    <div>
+      <p class="about-text reveal">
+        Cinco Studio es un estudio de fotografía y producción de video fundado en una convicción:
+        lo más persuasivo que una marca puede hacer es mostrar algo verdadero, y mostrarlo con belleza.
+      </p>
+      <p class="about-text reveal">
+        Trabajamos directamente con marcas, fundadores y equipos de marketing —
+        sin capas de agencia, sin dilución creativa. Solo el trabajo, al más alto nivel que sabemos lograr.
+      </p>
+      <div class="stats reveal">
+        <div class="stat">
+          <p class="stat-num">120<sup>+</sup></p>
+          <p class="stat-lbl">Proyectos entregados</p>
+        </div>
+        <div class="stat">
+          <p class="stat-num">8</p>
+          <p class="stat-lbl">Premios de la industria</p>
+        </div>
+        <div class="stat">
+          <p class="stat-num">40<sup>+</sup></p>
+          <p class="stat-lbl">Socios de marca</p>
+        </div>
+        <div class="stat">
+          <p class="stat-num">6</p>
+          <p class="stat-lbl">Años en producción</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ──────────────────────────────────────────────── -->
+<section class="section section-divider" id="services">
+  <p class="section-label">02 — Servicios</p>
+  <div class="services-intro">
+    <h2 class="services-headline reveal">Lo que<br>nosotros<br>hacemos.</h2>
+    <p class="services-sub reveal">
+      Cada proyecto que asumimos recibe nuestra atención completa.
+      Mantenemos la lista intencionalmente pequeña para que el trabajo siga siendo intencionalmente excelente.
+    </p>
+  </div>
+  <div class="svc-list">
+    <div class="svc reveal">
+      <p class="svc-n">01</p>
+      <h3 class="svc-name">Película de Marca</h3>
+      <p class="svc-desc">Films narrativos que definen cómo se percibe una marca. Del concepto al corte final — somos dueños de cada fotograma.</p>
+    </div>
+    <div class="svc reveal">
+      <p class="svc-n">02</p>
+      <h3 class="svc-name">Producción Comercial</h3>
+      <p class="svc-desc">Spots de alta producción para transmisión, streaming y digital. Diseñados para detener el scroll y mantener la atención.</p>
+    </div>
+    <div class="svc reveal">
+      <p class="svc-n">03</p>
+      <h3 class="svc-name">Fotografía</h3>
+      <p class="svc-desc">Fotografía editorial, de campaña y de producto con una mirada cinematográfica y la precisión técnica que exige.</p>
+    </div>
+    <div class="svc reveal">
+      <p class="svc-n">04</p>
+      <h3 class="svc-name">Documental</h3>
+      <p class="svc-desc">Trabajo de largo aliento arraigado en personas, procesos y lugares. Historias que merecen atención porque se la ganan.</p>
+    </div>
+    <div class="svc reveal">
+      <p class="svc-n">05</p>
+      <h3 class="svc-name">Postproducción</h3>
+      <p class="svc-desc">Corrección de color, diseño de sonido y acabado editorial. El trabajo invisible que hace que todo lo demás encaje.</p>
+    </div>
+    <div class="svc reveal">
+      <p class="svc-n">06</p>
+      <h3 class="svc-name">Dirección Creativa</h3>
+      <p class="svc-desc">Estrategia visual y dirección de arte para marcas que necesitan un punto de vista — no solo un socio de ejecución.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLIENTS ───────────────────────────────────────────────── -->
+<section class="section section-divider" id="clients">
+  <p class="section-label">03 — Clientes</p>
+  <div class="clients-intro">
+    <h2 class="services-headline reveal" style="font-size:clamp(2rem,3.5vw,3.5rem)">Marcas que confían en nosotros<br>con su trabajo<br>más visible.</h2>
+    <p class="clients-sub reveal">
+      No presumimos nombres. Estos son los socios que dejan hablar al trabajo —
+      y confiaron en nosotros para asegurarse de que lo hiciera.
+    </p>
+  </div>
+  <div class="client-grid reveal">
+    <div class="cl"><span>Solaris</span></div>
+    <div class="cl"><span>Aether<br>Athletics</span></div>
+    <div class="cl"><span>Northline</span></div>
+    <div class="cl"><span>Maison<br>Blanche</span></div>
+    <div class="cl"><span>Vance<br>&amp; Co.</span></div>
+    <div class="cl"><span>Meridian</span></div>
+    <div class="cl"><span>Heritage<br>Foundation</span></div>
+    <div class="cl"><span>Crestwood</span></div>
+    <div class="cl"><span>Dusk</span></div>
+    <div class="cl"><span>Orion<br>Labs</span></div>
+    <div class="cl"><span>Beacon<br>Media</span></div>
+    <div class="cl"><span>The Fold</span></div>
+  </div>
+</section>
+
+<!-- ── CONTACT ───────────────────────────────────────────────── -->
+<section class="section section-divider" id="contact">
+  <p class="section-label">05 — Contacto</p>
+  <div class="contact-grid">
+    <div>
+      <h2 class="contact-headline reveal">
+        Hagamos<br>
+        <span class="red">algo</span><br>
+        juntos.
+      </h2>
+    </div>
+    <div>
+      <p class="contact-text reveal">
+        Aceptamos un número limitado de proyectos nuevos cada trimestre.<br>
+        Si estás construyendo algo que vale la pena ver — cuéntanos.
+      </p>
+      <a href="mailto:hola@cincostudio.com" class="contact-btn reveal">Ponerse en contacto</a>
+      <div class="contact-details reveal">
+        <div>
+          <p class="cd-label">Correo</p>
+          <p class="cd-val">hola@cincostudio.com</p>
+        </div>
+        <div>
+          <p class="cd-label">Ubicados en</p>
+          <p class="cd-val">Nueva York, NY</p>
+        </div>
+        <div>
+          <p class="cd-label">Disponibles</p>
+          <p class="cd-val">Q3 2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <span class="f-logo"><img src="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio" style="height:24px;width:auto;display:block;filter:brightness(0) invert(1);opacity:.5;"></span>
+  <span class="f-copy">© 2026 Cinco Studio. Todos los derechos reservados.</span>
+  <div class="f-links">
+    <a href="#">Instagram</a>
+    <a href="#">Vimeo</a>
+    <a href="#">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  /* ── KEYBOARD NAV DETECTION ──────────────────────── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Tab') document.body.classList.add('keyboard-nav');
+  });
+  document.addEventListener('mousedown', () => {
+    document.body.classList.remove('keyboard-nav');
+  });
+
+  /* ── CURSOR ─────────────────────────────────────── */
+  const cur = document.getElementById('cur');
+  const ring = document.getElementById('cur-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  (function rafLoop() {
+    rx += (mx - rx) * .18;
+    ry += (my - ry) * .18;
+    cur.style.cssText  = `left:${mx}px;top:${my}px`;
+    ring.style.cssText = `left:${rx}px;top:${ry}px`;
+    requestAnimationFrame(rafLoop);
+  })();
+
+  const hovers = document.querySelectorAll('a, .wi, .svc, .cl, .tc');
+  hovers.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cur.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1.6)';
+      ring.style.borderColor = 'rgba(175,40,37,.55)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cur.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.borderColor = 'rgba(190,178,142,.4)';
+    });
+  });
+
+  /* ── NAV ON SCROLL ──────────────────────────────── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  /* ── ACTIVE NAV SECTION TRACKING ────────────────── */
+  const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+  const sections = ['work', 'studio', 'services', 'contact'].map(id => document.getElementById(id)).filter(Boolean);
+
+  const sectionObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`.nav-links a[data-section="${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(s => sectionObs.observe(s));
+
+  /* ── SCROLL REVEAL ──────────────────────────────── */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 4) * 0.08 + 's';
+    obs.observe(el);
+  });
+
+  /* ── HERO VIDEO SCROLL-TO-EXPAND ────────────────────── */
+  const heroScaler = document.getElementById('heroVideoScaler');
+  const heroSect   = document.getElementById('hero');
+  const START_SCALE = 0.45;
+  function updateHeroScale() {
+    const rect     = heroSect.getBoundingClientRect();
+    const maxScroll = heroSect.offsetHeight - window.innerHeight;
+    const scrolled  = Math.max(0, -rect.top);
+    const progress  = Math.min(scrolled / maxScroll, 1);
+    const scale     = START_SCALE + progress * (1 - START_SCALE);
+    const radius    = (1 - progress) * 28;
+    heroScaler.style.transform    = `scale(${scale})`;
+    heroScaler.style.borderRadius = `${radius}px`;
+  }
+  updateHeroScale();
+  window.addEventListener('scroll', updateHeroScale, { passive: true });
+
+  /* ── HERO SOUND TOGGLE ──────────────────────────────── */
+  const soundBtn = document.getElementById('soundBtn');
+  const heroVideo = document.querySelector('.hero-video');
+  const iconMuted = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`;
+  const iconSound = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
+  soundBtn.addEventListener('click', () => {
+    heroVideo.muted = !heroVideo.muted;
+    soundBtn.innerHTML = heroVideo.muted ? iconMuted : iconSound;
+    soundBtn.setAttribute('aria-label', heroVideo.muted ? 'Activar sonido' : 'Silenciar');
+  });
+
+  /* ── GALLERY: SEEK TO NON-BLACK FRAME + PLAY ON HOVER ── */
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const video = item.querySelector('.gallery-video');
+    if (!video) return;
+
+    video.addEventListener('loadedmetadata', () => {
+      /* Seek to 3s or 10% of duration, whichever is greater, to skip black intros */
+      video.currentTime = Math.max(3, video.duration * 0.10);
+    }, { once: true });
+
+    item.addEventListener('mouseenter', () => {
+      video.play().catch(() => {});
+      cur.style.background = 'var(--cream)';
+    });
+    item.addEventListener('mouseleave', () => {
+      video.pause();
+      video.currentTime = Math.max(3, video.duration * 0.10);
+      cur.style.background = 'var(--red)';
+    });
+  });
+</script>
+</body>
+</html>

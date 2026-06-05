@@ -291,20 +291,6 @@
     .cl span { font-size: .75rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,245,229,.3); text-align: center; line-height: 1.5; transition: color .3s; }
     .cl:hover span { color: var(--cream); }
 
-    /* ─── TESTIMONIALS ─────────────────────────────────────── */
-    .testimonials-intro { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; gap: 4rem; }
-    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--dim); }
-    .tc { background: #000; overflow: hidden; transition: background .3s; }
-    .tc:hover { background: #080808; }
-    .tc-body { padding: 2.8rem 2rem 2.4rem; }
-    .tc-quote {
-      font-size: .88rem; font-weight: 300; line-height: 1.75; color: var(--cream);
-      border-bottom: 1px solid var(--dim); padding-bottom: 1.4rem; margin-bottom: 1.2rem;
-    }
-    .tc-quote::before { content: '\201C'; display: block; font-size: 2.4rem; font-weight: 900; line-height: .8; color: var(--red); margin-bottom: .6rem; }
-    .tc-name { font-size: .78rem; font-weight: 600; color: var(--warm); letter-spacing: .06em; }
-    .tc-role { font-size: .58rem; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; color: var(--red); margin-top: .35rem; }
-
     /* ─── CONTACT ──────────────────────────────────────────── */
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center; }
     .contact-headline { font-size: clamp(3.5rem, 8vw, 10rem); font-weight: 900; line-height: .82; letter-spacing: -.05em; color: var(--cream); }
@@ -402,7 +388,6 @@
       .svc:nth-child(3n) { border-right: 1px solid var(--dim); }
       .svc:nth-child(2n) { border-right: none; }
       .client-grid { grid-template-columns: repeat(3,1fr); }
-      .testimonial-grid { grid-template-columns: 1fr 1fr; }
       .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
     }
 
@@ -427,12 +412,9 @@
       .svc-list { grid-template-columns: 1fr; }
       .svc, .svc:nth-child(3n), .svc:nth-child(2n) { border-right: none; }
       .svc-desc { font-size: 1rem; }
-      .tc-quote { font-size: 1rem; }
       .client-grid { grid-template-columns: repeat(2,1fr); }
       .services-intro { flex-direction: column; }
       .clients-intro { flex-direction: column; }
-      .testimonials-intro { flex-direction: column; }
-      .testimonial-grid { grid-template-columns: 1fr; }
       footer { flex-direction: column; text-align: center; }
       .f-links { justify-content: center; }
       .contact-btn { min-height: 44px; display: inline-flex; align-items: center; }
@@ -709,43 +691,9 @@
   </div>
 </section>
 
-<!-- ── TESTIMONIALS ──────────────────────────────────────────── -->
-<section class="section section-divider" id="testimonials">
-  <p class="section-label">04 — Testimonios</p>
-  <div class="testimonials-intro">
-    <h2 class="services-headline reveal" style="font-size:clamp(2rem,3.5vw,3.5rem)">Lo que dicen<br>nuestros<br>clientes.</h2>
-    <p class="clients-sub reveal">
-      Algunas palabras de las personas con las que trabajamos.
-    </p>
-  </div>
-  <div class="testimonial-grid">
-    <div class="tc reveal">
-      <div class="tc-body">
-        <p class="tc-quote">No solo nos entregaron un video. Nos entregaron algo que volvió a explicarnos por qué hacemos lo que hacemos.</p>
-        <p class="tc-name">Andrés Villanueva</p>
-        <p class="tc-role">Director Creativo — Solaris</p>
-      </div>
-    </div>
-    <div class="tc reveal">
-      <div class="tc-body">
-        <p class="tc-quote">Trabajar con ellos es fácil. Sin briefings eternos ni rondas de cambios sin fin. Entienden a la primera.</p>
-        <p class="tc-name">Camila Restrepo</p>
-        <p class="tc-role">Fundadora — Maison Blanche</p>
-      </div>
-    </div>
-    <div class="tc reveal">
-      <div class="tc-body">
-        <p class="tc-quote">Con el presupuesto que teníamos, el resultado superó lo que esperábamos. Esa campaña todavía nos trae clientes.</p>
-        <p class="tc-name">Matías Herrera</p>
-        <p class="tc-role">VP de Marketing — Northline</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ── CONTACT ───────────────────────────────────────────────── -->
 <section class="section section-divider" id="contact">
-  <p class="section-label">05 — Contacto</p>
+  <p class="section-label">04 — Contacto</p>
   <div class="contact-grid">
     <div>
       <h2 class="contact-headline reveal">

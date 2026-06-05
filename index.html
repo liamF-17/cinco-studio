@@ -291,6 +291,19 @@
     .cl span { font-size: .75rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,245,229,.3); text-align: center; line-height: 1.5; transition: color .3s; }
     .cl:hover span { color: var(--cream); }
 
+    /* ─── HEADLINE MEDIA ───────────────────────────────────── */
+    .headline-media {
+      position: relative; width: 100%; aspect-ratio: 16 / 9;
+      margin-top: 2.5rem; overflow: hidden;
+      background-size: cover; background-position: center;
+      border: 1px solid var(--dim);
+    }
+    .headline-media::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(to top, rgba(0,0,0,.5) 0%, transparent 55%);
+    }
+    .headline-media--band { margin-bottom: 4rem; }
+
     /* ─── CONTACT ──────────────────────────────────────────── */
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center; }
     .contact-headline { font-size: clamp(3.5rem, 8vw, 10rem); font-weight: 900; line-height: .82; letter-spacing: -.05em; color: var(--cream); }
@@ -591,6 +604,7 @@
   <div class="about-grid">
     <div>
       <h2 class="about-headline reveal">El oficio<br>por encima<br>de todo.</h2>
+      <div class="headline-media reveal" style="background-image:url('https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,c_fill,g_auto,ar_16:9,w_1600/hacemos-1-cinematographer')" role="img" aria-label="Detrás de cámaras: director de fotografía en set"></div>
     </div>
     <div>
       <p class="about-text reveal">
@@ -632,6 +646,7 @@
       Tomamos pocos proyectos a la vez. Así cada uno recibe toda nuestra atención.
     </p>
   </div>
+  <div class="headline-media headline-media--band reveal" style="background-image:url('https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,c_fill,g_auto,ar_16:9,w_1600/hacemos-2-filmset')" role="img" aria-label="Set de filmación en estudio"></div>
   <div class="svc-list">
     <div class="svc reveal">
       <p class="svc-n">01</p>
@@ -675,6 +690,7 @@
       Algunas de las marcas con las que hemos trabajado.
     </p>
   </div>
+  <div class="headline-media headline-media--band reveal" style="background-image:url('https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,c_fill,g_auto,ar_16:9,w_1600/marcas-1-product')" role="img" aria-label="Trabajo de producto para marca"></div>
   <div class="client-grid reveal">
     <div class="cl"><span>Solaris</span></div>
     <div class="cl"><span>Aether<br>Athletics</span></div>

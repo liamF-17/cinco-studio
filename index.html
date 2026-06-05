@@ -248,6 +248,7 @@
     /* ─── SHARED SECTION ─────────────────────────────────── */
     .section { padding: 8rem 3rem; }
     .section-divider { border-top: 1px solid var(--dim); }
+    .sec-sep { width: clamp(120px, 22%, 280px); height: 1px; margin: 0 auto; background: var(--warm); }
     section[id], div[id] { scroll-margin-top: 5rem; }
     .section-label {
       font-size: .6rem; font-weight: 700; letter-spacing: .38em; text-transform: uppercase;
@@ -599,6 +600,7 @@
 </div>
 
 <!-- ── ABOUT ─────────────────────────────────────────────────── -->
+<div class="sec-sep" aria-hidden="true"></div>
 <section class="section section-divider" id="studio">
   <p class="section-label">01 — El Estudio</p>
   <div class="about-grid">
@@ -638,6 +640,7 @@
 </section>
 
 <!-- ── SERVICES ──────────────────────────────────────────────── -->
+<div class="sec-sep" aria-hidden="true"></div>
 <section class="section section-divider" id="services">
   <p class="section-label">02 — Servicios</p>
   <div class="services-intro">
@@ -682,6 +685,7 @@
 </section>
 
 <!-- ── CLIENTS ───────────────────────────────────────────────── -->
+<div class="sec-sep" aria-hidden="true"></div>
 <section class="section section-divider" id="clients">
   <p class="section-label">03 — Clientes</p>
   <div class="clients-intro">

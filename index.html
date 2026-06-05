@@ -341,9 +341,10 @@
 
     /* ─── HERO LOGO ANIMATION ───────────────────────────────── */
     .hero-logo-anim {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%); z-index: 4;
-      width: clamp(416px, 75vw, 1066px); pointer-events: none;
+      position: absolute; top: 32%; left: 50%;
+      transform: translate(-50%, -50%); z-index: 6;
+      width: 10vw; pointer-events: none;
+      will-change: width;
     }
     .hero-logo-anim video { width: 100%; height: auto; display: block; }
 
@@ -895,7 +896,10 @@
   /* ── HERO VIDEO SCROLL-TO-EXPAND ────────────────────── */
   const heroScaler = document.getElementById('heroVideoScaler');
   const heroSect   = document.getElementById('hero');
+  const heroLogo   = document.querySelector('.hero-logo-anim');
   const START_SCALE = 0.45;
+  const LOGO_START_FRAC = 0.10;   /* small at top of scroll */
+  const LOGO_END_FRAC   = 0.34;   /* grows with the video   */
   function updateHeroScale() {
     const rect      = heroSect.getBoundingClientRect();
     const maxScroll = heroSect.offsetHeight - window.innerHeight;
@@ -905,9 +909,12 @@
     const radius    = (1 - progress) * 28;
     heroScaler.style.transform    = `scale(${scale})`;
     heroScaler.style.borderRadius = `${radius}px`;
+    const logoFrac  = LOGO_START_FRAC + progress * (LOGO_END_FRAC - LOGO_START_FRAC);
+    heroLogo.style.width = (window.innerWidth * logoFrac) + 'px';
   }
   updateHeroScale();
   window.addEventListener('scroll', updateHeroScale, { passive: true });
+  window.addEventListener('resize', updateHeroScale, { passive: true });
 
   /* ── HERO SOUND TOGGLE ──────────────────────────────── */
   const soundBtn  = document.getElementById('soundBtn');

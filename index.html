@@ -202,9 +202,14 @@
     }
     .hero-cta:hover { color: var(--red); }
     .scroll-hint {
-      position: absolute; bottom: 2.5rem; left: 3rem;
-      display: flex; flex-direction: column; align-items: flex-start;
-      gap: .6rem; z-index: 5; animation: fadeIn 1s 1.2s ease both;
+      position: absolute; top: 50%; right: 3rem; left: auto; bottom: auto;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: .6rem; z-index: 5; animation: scrollHintIn 1s 1.2s ease both;
+    }
+    @keyframes scrollHintIn {
+      from { opacity: 0; transform: translateY(calc(-50% + 16px)); }
+      to   { opacity: 1; transform: translateY(-50%); }
     }
     .scroll-hint-label {
       font-size: .55rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase;

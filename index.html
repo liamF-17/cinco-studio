@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
   <title>Cinco Studio — Fotografía y Producción de Video</title>
   <link rel="preload" as="video" href="assets/REDPOINT_HORIZONTAL.mp4">
   <meta name="description" content="Cinco Studio es un estudio de fotografía y producción de video. Films de marca, comerciales y fotografía con acabado de cine.">
@@ -31,6 +32,9 @@
       font-family: var(--font);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      overscroll-behavior-y: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       cursor: none;
     }
 
@@ -129,8 +133,8 @@
 
     /* ─── HAMBURGER ──────────────────────────────────────── */
     .hamburger {
-      display: none; flex-direction: column; gap: 5px;
-      background: none; border: none; padding: 4px; cursor: none; z-index: 201;
+      display: none; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+      width: 44px; height: 44px; background: none; border: none; padding: 4px; cursor: none; z-index: 201;
     }
     .hamburger span {
       display: block; width: 24px; height: 1.5px; background: var(--cream);
@@ -338,7 +342,7 @@
     .hero-sound-btn {
       position: absolute; top: 7rem; right: 3rem; z-index: 5;
       background: rgba(0,0,0,.45); border: 1px solid rgba(190,178,142,.3);
-      color: var(--cream); width: 42px; height: 42px; border-radius: 50%;
+      color: var(--cream); width: 44px; height: 44px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       cursor: none; transition: background .25s, border-color .25s; flex-shrink: 0;
     }
@@ -437,6 +441,33 @@
       .gallery-item { flex: none; height: 278px; width: 100%; border-radius: 6px; }
       .gallery-item:hover { flex: none; height: 401px; }
       .gallery-play { width: 36px; height: 36px; }
+    }
+    /* MOBILE / TOUCH OPTIMIZATION */
+    @media (hover: none), (pointer: coarse) {
+      body { cursor: auto; }
+      #cur, #cur-ring { display: none !important; }
+      a, button, .hamburger, .hero-sound-btn, .gallery-item, [role="button"] { cursor: pointer; }
+    }
+    nav { padding-left: max(3rem, env(safe-area-inset-left)); padding-right: max(3rem, env(safe-area-inset-right)); }
+    .hero-sticky { padding-bottom: max(3rem, env(safe-area-inset-bottom)); }
+    footer { padding-bottom: max(2rem, env(safe-area-inset-bottom)); }
+    @media (max-width: 768px) {
+      nav { padding-top: max(1.5rem, env(safe-area-inset-top));
+            padding-left: max(1.5rem, env(safe-area-inset-left));
+            padding-right: max(1.5rem, env(safe-area-inset-right)); }
+      .hero-sticky { padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); }
+      .hero-sound-btn { top: 5.25rem; right: max(1.5rem, env(safe-area-inset-right)); }
+      .nav-links { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+    }
+    @media (max-width: 480px) {
+      .section { padding: 4.5rem 1.25rem; }
+      .gallery-section { padding: 2.5rem 1.25rem; }
+      .hero-sticky { padding: 1.25rem; padding-bottom: max(1.25rem, env(safe-area-inset-bottom)); }
+      .stat-num { font-size: 2.7rem; }
+      .stat-num sup { font-size: 1.4rem; }
+      .mi { font-size: .58rem; padding: 0 1.4rem; }
+      .sec-sep { width: clamp(96px, 40%, 200px); }
+      .headline-media { margin-top: 1.8rem; }
     }
   </style>
 </head>
@@ -786,6 +817,7 @@
   const ring = document.getElementById('cur-ring');
   let mx = 0, my = 0, rx = 0, ry = 0;
 
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
   (function rafLoop() {
@@ -809,6 +841,7 @@
       ring.style.borderColor = 'rgba(190,178,142,.4)';
     });
   });
+  } /* end custom-cursor guard (pointer:fine only) */
 
   /* ── NAV ON SCROLL ──────────────────────────────── */
   const nav = document.getElementById('nav');

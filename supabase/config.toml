@@ -1,0 +1,30 @@
+# Supabase CLI project config. The GitHub integration reads migrations
+# from supabase/migrations/ regardless of this file; config.toml mostly
+# matters when running `supabase start` for local dev.
+#
+# Linked project: liamF-17's Project (joodiswcheojiniewktk, us-east-1)
+
+project_id = "cinco-studio"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "https://2-eta-jade.vercel.app"
+additional_redirect_urls = ["http://localhost:4178"]
+jwt_expiry = 3600
+enable_signup = false

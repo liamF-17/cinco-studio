@@ -342,6 +342,13 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
+    /* Native <dialog> renders in the top layer, above the custom red cursor
+       (#cur, z-index: 9999). With body{cursor:none}, that means NO cursor is
+       visible inside the dialog. Re-enable native cursors here only. */
+    .contact-dialog, .contact-dialog *               { cursor: auto; }
+    .contact-dialog button                            { cursor: pointer; }
+    .contact-dialog input, .contact-dialog textarea  { cursor: text; }
+    .contact-dialog button:disabled                   { cursor: not-allowed; }
     .contact-dialog[open] { animation: dialogIn .35s cubic-bezier(.16,1,.3,1); }
     @keyframes dialogIn {
       from { opacity: 0; transform: translateY(16px); }

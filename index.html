@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#000000">
   <title>Cinco Studio — Fotografía y Producción de Video</title>
-  <link rel="preload" as="video" href="assets/REDPOINT_HORIZONTAL.mp4">
   <meta name="description" content="Cinco Studio es un estudio de fotografía y producción de video. Films de marca, comerciales y fotografía con acabado de cine.">
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png">
   <link rel="apple-touch-icon" href="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --black:  #000000;
@@ -145,15 +144,15 @@
     .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
     /* ─── HERO ───────────────────────────────────────────── */
-    .hero { position: relative; height: 200vh; width: 100%; }
+    .hero { position: relative; height: 100svh; width: 100%; }
     .hero-sticky {
-      position: sticky; top: 0; height: 100svh; width: 100%;
+      position: relative; top: 0; height: 100svh; width: 100%;
       display: flex; align-items: flex-end; padding: 3rem; overflow: hidden;
     }
     .hero-video-scaler {
       position: absolute; inset: 0; transform-origin: center center;
-      will-change: transform; border-radius: 28px; overflow: hidden;
-      transform: scale(0.45);
+      will-change: transform; border-radius: 0; overflow: hidden;
+      transform: scale(1);
     }
     .hero-video {
       position: absolute; inset: 0; width: 100%; height: 100%;
@@ -352,7 +351,7 @@
     .hero-logo-anim {
       position: absolute; top: 32%; left: 50%;
       transform: translate(-50%, -50%); z-index: 6;
-      width: 10vw; pointer-events: none;
+      width: 34vw; pointer-events: none;
       will-change: width;
     }
     .hero-logo-anim video { width: 100%; height: auto; display: block; }
@@ -430,6 +429,8 @@
       .nav-links a { font-size: 1.1rem; letter-spacing: .3em; min-height: 44px; display: flex; align-items: center; }
       .section { padding: 5rem 1.5rem; }
       .hero-sticky { padding: 1.5rem; }
+      .hero-footer { flex-direction: column; align-items: flex-start; gap: 1.4rem; }
+      .hero-tagline { max-width: 100%; }
       .scroll-hint { display: none; }
       .svc-list { grid-template-columns: 1fr; }
       .svc, .svc:nth-child(3n), .svc:nth-child(2n) { border-right: none; }
@@ -496,7 +497,7 @@
 
 <!-- NAV -->
 <nav id="nav" role="navigation" aria-label="Navegación principal">
-  <a href="#" class="nav-logo"><img src="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio" style="height:52px;width:auto;display:block;filter:brightness(0) invert(1);"></a>
+  <a href="#" class="nav-logo"><img src="https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,w_200/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio" style="height:52px;width:auto;display:block;filter:brightness(0) invert(1);"></a>
   <ul class="nav-links" id="navLinks" role="list">
     <li><a href="#work" data-section="work">Trabajo</a></li>
     <li><a href="#studio" data-section="studio">Estudio</a></li>
@@ -514,7 +515,7 @@
 <div class="hero-sticky">
   <div class="hero-video-scaler" id="heroVideoScaler">
     <video class="hero-video" autoplay muted loop playsinline>
-      <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/REDPOINT_HORIZONTAL_xft6zw.mp4" type="video/mp4">
+      <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/f_auto,q_auto,w_1280/REDPOINT_HORIZONTAL_xft6zw.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
   </div>
@@ -522,11 +523,11 @@
   <div class="hero-vignette"></div>
 
   <div class="hero-logo-anim">
-    <video autoplay muted loop playsinline>
+    <video autoplay muted loop playsinline preload="none">
       <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/LOGO_ANIMATION_msqgkv.webm" type="video/webm">
     </video>
     <!-- iOS Safari ignores alpha in WebM (renders a black box); show the transparent PNG on touch devices instead -->
-    <img class="hero-logo-fallback" src="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio">
+    <img class="hero-logo-fallback" src="https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,w_600/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio">
   </div>
 
   <button class="hero-sound-btn" id="soundBtn" aria-label="Activar sonido">
@@ -566,49 +567,49 @@
   <div class="gallery-items">
 
     <div class="gallery-item">
-      <video class="gallery-video" muted loop playsinline preload="metadata">
+      <video class="gallery-video" muted loop playsinline preload="none">
         <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/VERO_TIM_CORTO_jsyf0v.mp4" type="video/mp4">
       </video>
       <div class="gallery-play"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#FCF5E8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
     </div>
 
     <div class="gallery-item">
-      <video class="gallery-video" muted loop playsinline preload="metadata">
+      <video class="gallery-video" muted loop playsinline preload="none">
         <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/hypermotors_v3_kvdp6w.mp4" type="video/mp4">
       </video>
       <div class="gallery-play"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#FCF5E8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
     </div>
 
     <div class="gallery-item">
-      <video class="gallery-video" muted loop playsinline preload="metadata">
+      <video class="gallery-video" muted loop playsinline preload="none">
         <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/lucia_reel_V2_xajvqb.mp4" type="video/mp4">
       </video>
       <div class="gallery-play"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#FCF5E8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
     </div>
 
     <div class="gallery-item">
-      <video class="gallery-video" muted loop playsinline preload="metadata">
+      <video class="gallery-video" muted loop playsinline preload="none">
         <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/CZR_LANDSCAPE_pt7hox.mp4" type="video/mp4">
       </video>
       <div class="gallery-play"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#FCF5E8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
     </div>
 
     <div class="gallery-item">
-      <video class="gallery-video" muted loop playsinline preload="metadata">
+      <video class="gallery-video" muted loop playsinline preload="none">
         <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/secretdisco_landscape_oa2pnu.mp4" type="video/mp4">
       </video>
       <div class="gallery-play"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#FCF5E8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
     </div>
 
     <div class="gallery-item">
-      <video class="gallery-video" muted loop playsinline preload="metadata">
+      <video class="gallery-video" muted loop playsinline preload="none">
         <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/QUINEMA2_V2_dorcfs.mp4" type="video/mp4">
       </video>
       <div class="gallery-play"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#FCF5E8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
     </div>
 
     <div class="gallery-item">
-      <video class="gallery-video" muted loop playsinline preload="metadata">
+      <video class="gallery-video" muted loop playsinline preload="none">
         <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/q_auto/QUINEMA_V1_k0biyv.mp4" type="video/mp4">
       </video>
       <div class="gallery-play"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#FCF5E8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
@@ -788,7 +789,7 @@
 
 <!-- ── FOOTER ────────────────────────────────────────────────── -->
 <footer>
-  <span class="f-logo"><img src="https://res.cloudinary.com/dfgb7ptri/image/upload/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio" style="height:24px;width:auto;display:block;filter:brightness(0) invert(1);opacity:.5;"></span>
+  <span class="f-logo"><img src="https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,w_120/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio" style="height:24px;width:auto;display:block;filter:brightness(0) invert(1);opacity:.5;"></span>
   <span class="f-copy">© 2026 Cinco Studio. Todos los derechos reservados.</span>
   <div class="f-links">
     <a href="#">Instagram</a>
@@ -908,29 +909,6 @@
     el.style.transitionDelay = (i % 4) * 0.08 + 's';
     obs.observe(el);
   });
-
-  /* ── HERO VIDEO SCROLL-TO-EXPAND ────────────────────── */
-  const heroScaler = document.getElementById('heroVideoScaler');
-  const heroSect   = document.getElementById('hero');
-  const heroLogo   = document.querySelector('.hero-logo-anim');
-  const START_SCALE = 0.45;
-  const LOGO_START_FRAC = 0.10;   /* small at top of scroll */
-  const LOGO_END_FRAC   = 0.34;   /* grows with the video   */
-  function updateHeroScale() {
-    const rect      = heroSect.getBoundingClientRect();
-    const maxScroll = heroSect.offsetHeight - window.innerHeight;
-    const scrolled  = Math.max(0, -rect.top);
-    const progress  = Math.min(scrolled / maxScroll, 1);
-    const scale     = START_SCALE + progress * (1 - START_SCALE);
-    const radius    = (1 - progress) * 28;
-    heroScaler.style.transform    = `scale(${scale})`;
-    heroScaler.style.borderRadius = `${radius}px`;
-    const logoFrac  = LOGO_START_FRAC + progress * (LOGO_END_FRAC - LOGO_START_FRAC);
-    heroLogo.style.width = (window.innerWidth * logoFrac) + 'px';
-  }
-  updateHeroScale();
-  window.addEventListener('scroll', updateHeroScale, { passive: true });
-  window.addEventListener('resize', updateHeroScale, { passive: true });
 
   /* ── HERO SOUND TOGGLE ──────────────────────────────── */
   const soundBtn  = document.getElementById('soundBtn');

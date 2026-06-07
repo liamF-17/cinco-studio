@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
   <style>
     :root {
       --black:  #000000;
@@ -324,6 +325,110 @@
     .contact-details { display: flex; gap: 3.5rem; margin-top: 3rem; flex-wrap: wrap; }
     .cd-label { font-size: .55rem; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--red); margin-bottom: .4rem; }
     .cd-val { font-size: .82rem; color: var(--warm); }
+
+    /* ─── CONTACT DIALOG ──────────────────────────────────── */
+    .contact-dialog {
+      width: 92vw; max-width: 520px;
+      padding: 0; border: 1px solid rgba(190,178,142,0.15);
+      background: var(--black); color: var(--cream);
+      border-radius: 0;
+      font-family: var(--font);
+      /* Re-assert native dialog centering — our global `*{margin:0}` reset
+         clobbers the user-agent `margin:auto` that centers <dialog>. */
+      margin: auto;
+    }
+    .contact-dialog::backdrop {
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .contact-dialog[open] { animation: dialogIn .35s cubic-bezier(.16,1,.3,1); }
+    @keyframes dialogIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .cd-inner { padding: 3rem 2.5rem; }
+    .cd-title {
+      font-size: clamp(1.6rem, 3vw, 2.1rem);
+      font-weight: 900; letter-spacing: -.035em;
+      color: var(--cream); line-height: .95;
+      margin-bottom: .9rem;
+    }
+    .cd-sub {
+      font-size: .85rem; font-weight: 300;
+      line-height: 1.65; color: var(--warm);
+      margin-bottom: 2.2rem;
+    }
+    .cd-form { display: flex; flex-direction: column; gap: 1.4rem; }
+    .cd-field { display: flex; flex-direction: column; gap: .5rem; }
+    .cd-field-label {
+      font-size: .55rem; font-weight: 700;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--red);
+    }
+    .cd-input, .cd-textarea {
+      width: 100%; background: transparent;
+      border: none; border-bottom: 1px solid rgba(190,178,142,0.15);
+      color: var(--cream); font-family: var(--font);
+      font-size: .9rem; font-weight: 300;
+      padding: .55rem 0; border-radius: 0;
+      outline: none; transition: border-color .25s;
+      resize: none;
+    }
+    .cd-input::placeholder, .cd-textarea::placeholder {
+      color: rgba(255,245,229,.3); font-weight: 300;
+    }
+    .cd-input:focus, .cd-textarea:focus { border-bottom-color: var(--red); }
+    .cd-textarea { line-height: 1.55; }
+    .cd-honeypot {
+      position: absolute !important;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    .cd-actions {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 1.6rem; margin-top: 1.4rem;
+    }
+    .cd-cancel {
+      background: none; border: none; padding: .4rem 0;
+      font-family: var(--font); font-size: .65rem; font-weight: 700;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--cream); cursor: none;
+      border-bottom: 1px solid transparent; transition: border-color .25s;
+    }
+    .cd-cancel:hover { border-bottom-color: var(--cream); }
+    .cd-submit {
+      font-family: var(--font);
+      font-size: .7rem; font-weight: 800;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--black); background: var(--cream);
+      padding: 1rem 2.2rem; border: 1px solid var(--cream);
+      border-radius: 0; cursor: none;
+      transition: background .3s, color .3s, border-color .3s;
+    }
+    .cd-submit:hover { background: var(--red); color: var(--cream); border-color: var(--red); }
+    .cd-submit:disabled, .cd-cancel:disabled { opacity: .5; pointer-events: none; }
+    .cd-status {
+      font-size: .78rem; font-weight: 400; line-height: 1.55;
+      padding: .85rem 1rem; border: 1px solid var(--dim);
+      color: var(--warm); margin-top: -.4rem;
+    }
+    .cd-status.cd-status--ok    { color: var(--cream); border-color: var(--cream); }
+    .cd-status.cd-status--error { color: var(--red);   border-color: var(--red);   }
+    @media (max-width: 768px) {
+      .contact-dialog {
+        width: 100vw; max-width: 100vw; height: 100svh; max-height: 100svh;
+        margin: 0; border: none;
+      }
+      .cd-inner {
+        padding: 4rem 1.5rem 2rem;
+        height: 100%; overflow-y: auto;
+      }
+      .cd-actions { flex-direction: column-reverse; align-items: stretch; gap: 1rem; }
+      .cd-submit { min-height: 48px; }
+      .cd-cancel { min-height: 44px; text-align: center; }
+    }
 
     /* ─── FOOTER ───────────────────────────────────────────── */
     footer {
@@ -766,7 +871,7 @@
         Tomamos pocos proyectos nuevos cada trimestre.<br>
         Si tienes algo entre manos, cuéntanos.
       </p>
-      <a href="mailto:hola@cincostudio.com" class="contact-btn reveal">Escríbenos</a>
+      <button type="button" id="openContactBtn" class="contact-btn reveal">Escríbenos</button>
       <div class="contact-details reveal">
         <div>
           <p class="cd-label">Correo</p>
@@ -787,6 +892,42 @@
 
 </main>
 
+<!-- ── CONTACT DIALOG ───────────────────────────────────────── -->
+<dialog id="contactDialog" class="contact-dialog" aria-labelledby="contactDialogTitle">
+  <div class="cd-inner">
+    <h3 id="contactDialogTitle" class="cd-title">Hagamos algo juntos.</h3>
+    <p class="cd-sub">Cuéntanos sobre tu proyecto y te respondemos en 48h.</p>
+    <form id="contactForm" class="cd-form" novalidate>
+      <div class="cd-field">
+        <label class="cd-field-label" for="cd-nombre">Nombre</label>
+        <input class="cd-input" type="text" id="cd-nombre" name="nombre" required autocomplete="name">
+      </div>
+      <div class="cd-field">
+        <label class="cd-field-label" for="cd-correo">Correo electrónico</label>
+        <input class="cd-input" type="email" id="cd-correo" name="correo" required autocomplete="email">
+      </div>
+      <div class="cd-field">
+        <label class="cd-field-label" for="cd-asunto">Asunto</label>
+        <input class="cd-input" type="text" id="cd-asunto" name="asunto" placeholder="¿De qué se trata?" autocomplete="off">
+      </div>
+      <div class="cd-field">
+        <label class="cd-field-label" for="cd-mensaje">Mensaje</label>
+        <textarea class="cd-textarea" id="cd-mensaje" name="mensaje" rows="5" required placeholder="Cuéntanos sobre tu proyecto"></textarea>
+      </div>
+      <!-- Honeypot: real users never see/fill this; spam bots target obvious names like "website" -->
+      <div class="cd-honeypot" aria-hidden="true">
+        <label for="cd-website">Website</label>
+        <input type="text" id="cd-website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+      <div class="cd-status" id="cd-status" role="status" aria-live="polite" hidden></div>
+      <div class="cd-actions">
+        <button type="button" class="cd-cancel" id="cancelContactBtn">Cancelar</button>
+        <button type="submit" class="cd-submit">Enviar mensaje</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
 <!-- ── FOOTER ────────────────────────────────────────────────── -->
 <footer>
   <span class="f-logo"><img src="https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,w_120/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio" style="height:24px;width:auto;display:block;filter:brightness(0) invert(1);opacity:.5;"></span>
@@ -797,6 +938,64 @@
     <a href="#">LinkedIn</a>
   </div>
 </footer>
+
+<script>
+  /* ── SUPABASE CONTACT FORM CLIENT ─────────────────────
+     Defines window.submitContactForm(formEl) -> Promise<{ok, error?}>.
+     Loaded BEFORE the main script so the form's submit handler can call it.
+     Uses the publishable (anon) key — safe in the browser; RLS allows
+     INSERT-only on contact_submissions for the anon role. */
+  (function () {
+    const SUPABASE_URL = 'https://joodiswcheojiniewktk.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_vQZpzgyVZx_6t_qDyAOpuQ__WdzPV_v';
+    const FRIENDLY_ERROR =
+      'No pudimos enviar el mensaje. Intenta de nuevo o escríbenos a hola@cincostudio.com.';
+
+    function getClient() {
+      if (window.__cincoSb) return window.__cincoSb;
+      if (!window.supabase || typeof window.supabase.createClient !== 'function') return null;
+      window.__cincoSb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+      });
+      return window.__cincoSb;
+    }
+
+    window.submitContactForm = async function submitContactForm(formEl) {
+      try {
+        const sb = getClient();
+        if (!sb) return { ok: false, error: FRIENDLY_ERROR };
+
+        const data = new FormData(formEl);
+        const nombre  = String(data.get('nombre')  || '').trim();
+        const correo  = String(data.get('correo')  || '').trim();
+        const asunto  = String(data.get('asunto')  || '').trim();
+        const mensaje = String(data.get('mensaje') || '').trim();
+
+        if (!nombre || !correo || !mensaje) {
+          return { ok: false, error: 'Por favor completa nombre, correo y mensaje.' };
+        }
+
+        const payload = {
+          nombre, correo,
+          asunto: asunto || null,
+          mensaje,
+          user_agent: (navigator && navigator.userAgent) ? navigator.userAgent.slice(0, 1000) : null
+          /* source defaults server-side to 'cinco-studio website' */
+        };
+
+        const { error } = await sb.from('contact_submissions').insert(payload);
+        if (error) {
+          console.error('[contact_submissions] insert error:', error);
+          return { ok: false, error: FRIENDLY_ERROR };
+        }
+        return { ok: true };
+      } catch (err) {
+        console.error('[contact_submissions] unexpected error:', err);
+        return { ok: false, error: FRIENDLY_ERROR };
+      }
+    };
+  })();
+</script>
 
 <script>
   /* ── SAFARI DETECTION (alpha-WebM black-box workaround) ─
@@ -981,6 +1180,89 @@
       const fv = first.querySelector('.gallery-video');
       if (fv) fv.play().catch(() => {});
     }
+  }
+
+  /* ── CONTACT DIALOG ───────────────────────────────────── */
+  const contactDialog  = document.getElementById('contactDialog');
+  const openContactBtn = document.getElementById('openContactBtn');
+  const cancelContactBtn = document.getElementById('cancelContactBtn');
+  const contactForm    = document.getElementById('contactForm');
+
+  if (contactDialog && openContactBtn) {
+    openContactBtn.addEventListener('click', () => {
+      contactDialog.showModal();
+    });
+
+    cancelContactBtn.addEventListener('click', () => {
+      contactDialog.close('cancel');
+    });
+
+    /* Backdrop click → close. The dialog element itself fills the viewport for
+       click-target purposes; the actual visible card is .cd-inner. Any click
+       whose target is the dialog (not a descendant) is a backdrop click. */
+    contactDialog.addEventListener('click', (e) => {
+      if (e.target === contactDialog) contactDialog.close('backdrop');
+    });
+
+    const cdStatus    = document.getElementById('cd-status');
+    const cdSubmitBtn = contactForm.querySelector('.cd-submit');
+    const cdSubmitLbl = cdSubmitBtn.textContent;
+
+    const showCdStatus = (msg, kind) => {
+      cdStatus.textContent = msg;
+      cdStatus.classList.remove('cd-status--ok', 'cd-status--error');
+      if (kind) cdStatus.classList.add('cd-status--' + kind);
+      cdStatus.hidden = false;
+    };
+    const resetCdSubmitBtn = () => {
+      cdSubmitBtn.disabled = false;
+      cancelContactBtn.disabled = false;
+      cdSubmitBtn.textContent = cdSubmitLbl;
+    };
+    /* Wipe status + button state every time the dialog opens fresh */
+    contactDialog.addEventListener('close', () => {
+      cdStatus.hidden = true;
+      cdStatus.textContent = '';
+      cdStatus.classList.remove('cd-status--ok', 'cd-status--error');
+      resetCdSubmitBtn();
+    });
+
+    contactForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      /* Honeypot — bots fill obvious-named fields. If "website" has any value,
+         silently drop and close so the bot doesn't learn it was rejected. */
+      const honeypot = contactForm.elements.website;
+      if (honeypot && honeypot.value.trim() !== '') {
+        contactForm.reset();
+        contactDialog.close('spam');
+        return;
+      }
+
+      cdStatus.hidden = true;
+      cdSubmitBtn.disabled = true;
+      cancelContactBtn.disabled = true;
+      cdSubmitBtn.textContent = 'Enviando…';
+
+      try {
+        const result = typeof window.submitContactForm === 'function'
+          ? await window.submitContactForm(contactForm)
+          : { ok: false, error: 'Servicio no disponible. Intenta de nuevo.' };
+
+        if (result && result.ok) {
+          showCdStatus('¡Gracias! Te respondemos en menos de 48h.', 'ok');
+          contactForm.reset();
+          setTimeout(() => contactDialog.close('submit'), 2200);
+        } else {
+          showCdStatus((result && result.error) || 'No pudimos enviar el mensaje. Intenta de nuevo.', 'error');
+          resetCdSubmitBtn();
+        }
+      } catch (err) {
+        console.error('[contact] submit failure:', err);
+        showCdStatus('No pudimos enviar el mensaje. Intenta de nuevo.', 'error');
+        resetCdSubmitBtn();
+      }
+    });
   }
 </script>
 </body>

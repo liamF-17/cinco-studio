@@ -799,10 +799,13 @@
 </footer>
 
 <script>
-  /* ── iOS DETECTION (alpha-WebM black-box workaround) ─ */
+  /* ── SAFARI DETECTION (alpha-WebM black-box workaround) ─
+     Both iOS Safari and desktop Safari render the alpha channel of WebM
+     unreliably — swap the animation for the static transparent PNG. */
   const isIOS = /iP(hone|od|ad)/.test(navigator.userAgent) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  if (isIOS) document.body.classList.add('ios');
+  const isSafari = /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(navigator.userAgent);
+  if (isIOS || isSafari) document.body.classList.add('ios');
 
   /* ── KEYBOARD NAV DETECTION ──────────────────────── */
   document.addEventListener('keydown', e => {

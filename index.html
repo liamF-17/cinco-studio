@@ -466,10 +466,7 @@
       width: 34vw; pointer-events: none;
       will-change: width;
     }
-    .hero-logo-anim video { width: 100%; height: auto; display: block; }
-    /* Last-resort fallback shown only if the browser can't play any <source>
-       (lives inside <video>, so HTML5 picks it up automatically) */
-    .hero-logo-fallback { width: 100%; height: auto; display: block; }
+    .hero-logo-anim img { width: 100%; height: auto; display: block; }
 
     /* ─── GALLERY ─────────────────────────────────────────── */
     .gallery-section {
@@ -634,14 +631,15 @@
   <div class="hero-vignette"></div>
 
   <div class="hero-logo-anim">
-    <!-- Safari (desktop + iOS) plays the HEVC-alpha .mov; Chrome/Firefox/Edge play the WebM.
-         Browser picks the first <source> it can decode, so order matters: HEVC alpha first. -->
-    <video autoplay muted loop playsinline preload="none">
-      <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/LOGO_ANIMATION_MOV_2_g2qvjh.mov" type='video/quicktime; codecs="hvc1"'>
-      <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/LOGO_ANIMATION_msqgkv.webm" type="video/webm">
-      <!-- HTML5 fallback: shown only if no <source> can be played -->
-      <img class="hero-logo-fallback" src="https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,w_600/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio">
-    </video>
+    <!-- Animated WebP (VP8L, alpha intact) plays in Safari 14+, Chrome, Firefox, Edge —
+         one asset for every browser, transparency works everywhere. Cloudinary transcodes
+         the source APNG to animated WebP on the fly (fl_animated,f_webp). Static transparent
+         PNG is the fallback for any browser without animated-WebP support. -->
+    <picture>
+      <source type="image/webp"
+              srcset="https://res.cloudinary.com/dfgb7ptri/image/upload/w_800,fl_animated,f_webp,q_auto/ezgif.com-compress-png_s5ltgl.png">
+      <img src="https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,w_600/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio">
+    </picture>
   </div>
 
   <button class="hero-sound-btn" id="soundBtn" aria-label="Activar sonido">

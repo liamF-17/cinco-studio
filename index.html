@@ -467,10 +467,9 @@
       will-change: width;
     }
     .hero-logo-anim video { width: 100%; height: auto; display: block; }
-    .hero-logo-fallback { width: 100%; height: auto; display: none; }
-    /* iOS Safari can't show alpha WebM — swap the animation for the static logo there */
-    body.ios .hero-logo-anim video { display: none; }
-    body.ios .hero-logo-fallback { display: block; }
+    /* Last-resort fallback shown only if the browser can't play any <source>
+       (lives inside <video>, so HTML5 picks it up automatically) */
+    .hero-logo-fallback { width: 100%; height: auto; display: block; }
 
     /* ─── GALLERY ─────────────────────────────────────────── */
     .gallery-section {
@@ -635,11 +634,14 @@
   <div class="hero-vignette"></div>
 
   <div class="hero-logo-anim">
+    <!-- Safari (desktop + iOS) plays the HEVC-alpha .mov; Chrome/Firefox/Edge play the WebM.
+         Browser picks the first <source> it can decode, so order matters: HEVC alpha first. -->
     <video autoplay muted loop playsinline preload="none">
+      <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/LOGO_ANIMATION_MOV_2_g2qvjh.mov" type='video/quicktime; codecs="hvc1"'>
       <source src="https://res.cloudinary.com/dfgb7ptri/video/upload/LOGO_ANIMATION_msqgkv.webm" type="video/webm">
+      <!-- HTML5 fallback: shown only if no <source> can be played -->
+      <img class="hero-logo-fallback" src="https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,w_600/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio">
     </video>
-    <!-- iOS Safari ignores alpha in WebM (renders a black box); show the transparent PNG on touch devices instead -->
-    <img class="hero-logo-fallback" src="https://res.cloudinary.com/dfgb7ptri/image/upload/f_auto,q_auto,w_600/CINCOSTUDIO_mlxjud.png" alt="Cinco Studio">
   </div>
 
   <button class="hero-sound-btn" id="soundBtn" aria-label="Activar sonido">
@@ -1005,14 +1007,6 @@
 </script>
 
 <script>
-  /* ── SAFARI DETECTION (alpha-WebM black-box workaround) ─
-     Both iOS Safari and desktop Safari render the alpha channel of WebM
-     unreliably — swap the animation for the static transparent PNG. */
-  const isIOS = /iP(hone|od|ad)/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const isSafari = /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(navigator.userAgent);
-  if (isIOS || isSafari) document.body.classList.add('ios');
-
   /* ── KEYBOARD NAV DETECTION ──────────────────────── */
   document.addEventListener('keydown', e => {
     if (e.key === 'Tab') document.body.classList.add('keyboard-nav');
